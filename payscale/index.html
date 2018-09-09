@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1">
+		<title>Hacking jobs in www.PayScale.com</title>
+		<style>
+			body {
+				word-wrap: break-word;
+			}
+			pre {
+				word-wrap: break-word;
+			}
+			.text-align-right {
+				text-align: right;
+			}
+			.text-align-center {
+				text-align: center;
+			}
+			#searchTextBar {
+				width:100%;
+				max-width: 300px
+			}
+			#showTableResults {
+				display: none;
+			}
+		</style>
+		<link rel="stylesheet" type="text/css" href="./assets/datatables/datatables.min.css"/>
+		<script type="text/javascript" src="./assets/datatables/datatables.min.js"></script>
+	</head>
+
+	<body>
+		<h1 align="center">Hacking jobs in <a href="http://www.payscale.com/rccountries.aspx" target="_blank">www.PayScale.com</a></h1>
+
+		<h2>Instructions:</h2>
+		<ol>
+			<li>Open <a href="http://www.payscale.com/research/US/Country=United_States/Salary" target="_blank">payscale in USA</a> and search the job(s).</li>
+			<li>- (Optional) If it shows "Top Results for Job" select one of the suggestions.</li>
+			<li>Copy the job name without salary and country for example in "Web Developer Salary (United States)" you need to copy "Web Developer".</li>
+			<li>Return to this page and paste the job in search bar.</li>
+			<li>- (Optional) If you need to search more than one job you need to add @(at) befoe each job for example: @Web Developer @iOS Developer @Chief Technology Officer (CTO)</li>
+			<li>The search will take several minutes.</li>
+			<li>When the results have been showed, now you are able to sort and filter to compare.</li>
+			<li>Enjoy your searching!</li>
+			<li><small>Check our <a href="./TODO.md" target="_blank">TODO List (Markdown)</a>. If you need an online reader try <a href="https://chrome.google.com/webstore/detail/markdown-preview-plus/febilkbfcbhebfnokafefeacimjdckgl" target="_blank">"Markdown Preview Plus" extension</a> for <a href="https://www.google.com/chrome/" target="_blank">Chrome</a>.</small></li>
+		</ol>
+
+		<h2>Search:</h2>
+		<form id="wordsJobForm" action="#" method="GET">
+			<label for="searchTextBar">Write the jobs separated by @(at):</label>
+			<br>
+			<input type="text" id="searchTextBar" name="searchTextBar" value="" autofocus >
+			<input id="sendButton" type="submit" value="Search">
+		</form>
+		<br>
+		<table id="showTableResults" class="display" cellspacing="0" width="100%">
+			<thead>
+				<tr>
+					<th rowspan="2">Country</th>
+					<th rowspan="2">Job</th>
+					<th rowspan="2">PayScale</th>
+					<th colspan="6">Annual salary (USD)</th>
+					<th rowspan="2">Exchange rate to USD</th>
+					<th rowspan="2">Google finances</th>
+					<th colspan="7">Annual salary (country currency)</th>
+				</tr>
+				<tr>
+					<th>Median Monthly</th>
+					<th>Median</th>
+					<th>Min</th>
+					<th>Max</th>
+					<th>Total Min</th>
+					<th>Total Max</th>
+					<th>Currency</th>
+					<th>Median Monthly</th>
+					<th>Median</th>
+					<th>Min</th>
+					<th>Max</th>
+					<th>Total Min</th>
+					<th>Total Max</th>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<th>Median Monthly</th>
+					<th>Country</th>
+					<th>Job</th>
+					<th>PayScale</th>
+					<th>Median</th>
+					<th>Min</th>
+					<th>Max</th>
+					<th>Total Min</th>
+					<th>Total Max</th>
+					<th>Exchange rate to USD</th>
+					<th>Google finances</th>
+					<th>Currency</th>
+					<th>Median Monthly</th>
+					<th>Median</th>
+					<th>Min</th>
+					<th>Max</th>
+					<th>Total Min</th>
+					<th>Total Max</th>
+				</tr>
+			</tfoot>
+			<tbody>
+			</tbody>
+		</table>
+		<script>
+			//https://project.rovisoft.net/hck/payscale/jobs/iOS%20Developer,%20Software%20developer
+			var showTableResults = false;
+
+			$(document).ready(function() {
+
+				var sendButton = $('#sendButton')
+				$('#wordsJobForm').submit(function() {
+					sendButton.val('Searching! It will take several minutes......');
+					sendButton.prop( "disabled", true );
+					
+					if (showTableResults) {
+						showTableResults.destroy();
+					}
+
+					$('#showTableResults').css('display', 'block')
+					showTableResults = $('#showTableResults').DataTable( {
+						"processing": true,
+						"serverSide": false,
+						"ajax": "jobs/"+encodeURIComponent($('#searchTextBar').val()),
+						"fnInitComplete": function(oSettings, json) {
+							sendButton.val('Search');
+							sendButton.prop( "disabled", false );
+						}
+					});
+
+					return false;
+				});
+			} );
+		</script>
+	</body>
+
+</html>
